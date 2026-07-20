@@ -1,15 +1,39 @@
 """Application configuration module using Pydantic Settings."""
 
+from enum import Enum
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+class Environment(str, Enum):
+    """Execution environment enumeration."""
+
+    DEVELOPMENT = "development"
+    STAGING = "staging"
+    PRODUCTION = "production"
+
+
+class LogLevel(str, Enum):
+    """Logging level enumeration."""
+
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
+
+
 class Settings(BaseSettings):
-    """Central settings class loading environment variables."""
+    """Central application settings class loading environment variables."""
 
     PROJECT_NAME: str = "Smart Vehicle Purchase Consultant"
     API_VERSION: str = "v1"
+    API_PREFIX: str = "/api/v1"
+    HOST: str = "127.0.0.1"
+    PORT: int = 8000
+    LOG_LEVEL: LogLevel = LogLevel.INFO
     DEBUG: bool = True
-    ENVIRONMENT: str = "development"
+    ENVIRONMENT: Environment = Environment.DEVELOPMENT
 
     # AI Service Configuration
     GEMINI_API_KEY: str = ""

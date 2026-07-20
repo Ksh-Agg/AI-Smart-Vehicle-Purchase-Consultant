@@ -1,13 +1,13 @@
-"""Health check endpoints module for API v1."""
-
-from typing import Dict
+"""Health check endpoint module."""
 
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/health", tags=["Health"])
+from app.schemas.health import HealthResponse
+
+router = APIRouter(tags=["Health"])
 
 
-@router.get("", response_model=Dict[str, str])
-async def health_check() -> Dict[str, str]:
+@router.get("/health", response_model=HealthResponse)
+async def health_check() -> HealthResponse:
     """Health check endpoint returning system status."""
-    return {"status": "healthy"}
+    return HealthResponse(status="healthy")
