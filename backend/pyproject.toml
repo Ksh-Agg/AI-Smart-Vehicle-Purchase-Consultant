@@ -1,0 +1,25 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.139.2",
+    "google-genai>=2.12.1",
+    "numpy>=2.5.1",
+    "pandas>=3.0.3",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
+    "python-dotenv>=1.2.2",
+    "scikit-fuzzy>=0.5.0",
+    "scikit-learn>=1.9.0",
+    "uvicorn>=0.51.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "pytest>=9.1.1",
+    "ruff>=0.15.22",
+]
