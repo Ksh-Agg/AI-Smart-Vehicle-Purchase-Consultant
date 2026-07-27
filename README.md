@@ -1,18 +1,5 @@
 # 🚗 Smart Vehicle Purchase Consultant (SVPC)
 
-<p align="center">
-  <img src="docs/assets/banner.png" alt="SVPC Banner" width="900">
-</p>
-
-<p align="center">
-
-![Python](https://img.shields.io/badge/Python-3.13-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.116-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Status](https://img.shields.io/badge/Build-Passing-brightgreen)
-
-</p>
-
 An AI-powered vehicle recommendation platform that helps users find the most suitable vehicle based on their budget, lifestyle, preferences, and driving requirements.
 
 The Smart Vehicle Purchase Consultant combines structured questionnaires, intelligent preference inference, fuzzy logic, and Large Language Models (LLMs) to provide personalized vehicle recommendations along with natural language explanations for every recommendation.

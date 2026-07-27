@@ -52,9 +52,7 @@ async def validation_exception_handler(
     )
 
 
-async def unhandled_exception_handler(
-    request: Request, exc: Exception
-) -> JSONResponse:
+async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handle uncaught exceptions as internal server errors."""
     logger.critical("Unhandled exception: %s", exc, exc_info=True)
     return JSONResponse(

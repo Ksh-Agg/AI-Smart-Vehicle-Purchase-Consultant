@@ -1,8 +1,10 @@
 """Application configuration module using Pydantic Settings."""
 
 from enum import Enum
-
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 
 class Environment(str, Enum):
@@ -35,14 +37,32 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     ENVIRONMENT: Environment = Environment.DEVELOPMENT
 
+    # Database Configuration
+    DATABASE_HOST: str = "localhost"
+    DATABASE_PORT: int = 5432
+    DATABASE_NAME: str = "svpc"
+    DATABASE_USER: str = "postgres"
+    DATABASE_PASSWORD: str
+
+    @property
+    def database_url(self) -> str:
+        return (
+            f"postgresql+psycopg://"
+            f"{self.DATABASE_USER}:"
+            f"{self.DATABASE_PASSWORD}@"
+            f"{self.DATABASE_HOST}:"
+            f"{self.DATABASE_PORT}/"
+            f"{self.DATABASE_NAME}"
+        )
+
     # AI Service Configuration
     GEMINI_API_KEY: str = ""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=BASE_DIR / ".env",
         env_file_encoding="utf-8",
         extra="ignore",
     )
 
 
-settings = Settings()
+settings = Settings()  # type: ignore[call-arg]
