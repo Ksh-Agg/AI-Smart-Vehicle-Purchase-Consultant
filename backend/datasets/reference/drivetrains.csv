@@ -1,0 +1,5 @@
+drivetrain_id,canonical_name,display_name
+D001,FWD,Front Wheel Drive
+D002,RWD,Rear Wheel Drive
+D003,AWD,All Wheel Drive
+D004,4WD,Four Wheel Drive

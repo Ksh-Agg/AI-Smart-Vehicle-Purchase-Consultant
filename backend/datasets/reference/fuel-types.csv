@@ -1,0 +1,9 @@
+fuel_type_id,canonical_name,display_name,description,active
+F001,PETROL,Petrol,Petrol Internal Combustion Engine,TRUE
+F002,DIESEL,Diesel,Diesel Internal Combustion Engine,TRUE
+F003,CNG,CNG,Compressed Natural Gas,TRUE
+F004,ELECTRIC,Electric,Battery Electric Vehicle,TRUE
+F005,HYBRID,Hybrid,Hybrid Electric Vehicle,TRUE
+F006,STRONG_HYBRID,Strong Hybrid,Self Charging Hybrid,TRUE
+F007,PLUG_IN_HYBRID,Plug-in Hybrid,Externally Rechargeable Hybrid,TRUE
+F008,HYDROGEN,Hydrogen,Fuel Cell Vehicle,TRUE

@@ -1,0 +1,12 @@
+segment_id,canonical_name,display_name
+S001,ENTRY_HATCHBACK,Entry Hatchback
+S002,HATCHBACK,Hatchback
+S003,PREMIUM_HATCHBACK,Premium Hatchback
+S004,COMPACT_SEDAN,Compact Sedan
+S005,MID_SIZE_SEDAN,Mid-size Sedan
+S006,FULL_SIZE_SEDAN,Full-size Sedan
+S007,MICRO_SUV,Micro SUV
+S008,COMPACT_SUV,Compact SUV
+S009,MID_SIZE_SUV,Mid-size SUV
+S010,FULL_SIZE_SUV,Full-size SUV
+S011,MPV,MPV

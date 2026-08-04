@@ -1,0 +1,5 @@
+adas_level_id,level_name,description
+A000,NONE,No ADAS
+A001,LEVEL_1,Driver Assistance
+A002,LEVEL_2,Partial Automation
+A003,LEVEL_3,Conditional Automation

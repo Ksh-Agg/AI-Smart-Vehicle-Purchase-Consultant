@@ -1,0 +1,7 @@
+transmission_id,canonical_name,display_name,description
+T001,MANUAL,Manual,Manual Gearbox
+T002,AMT,AMT,Automated Manual Transmission
+T003,CVT,CVT,Continuously Variable Transmission
+T004,DCT,DCT,Dual Clutch Transmission
+T005,TORQUE_CONVERTER,Torque Converter,Hydraulic Automatic
+T006,SINGLE_SPEED,Single Speed,EV Reduction Gear

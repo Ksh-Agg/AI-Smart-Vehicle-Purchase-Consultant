@@ -1,4 +1,4 @@
-# ADR 002: ETL Architecture Design
+# ADR 001: ETL Architecture Design
 
 ## Status
 Proposed & Approved

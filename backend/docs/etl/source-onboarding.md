@@ -5,7 +5,7 @@ This guide explains how to integrate a new vehicle data source into the SVPC ETL
 ---
 
 ## Step 1: Analyze the Data Source
-Identify the columns/fields present in your raw data (CSV, JSON, or Excel) and locate their corresponding canonical targets in the **Master Dataset Field Dictionary v1.1**.
+Identify the columns/fields present in your raw data (CSV, JSON, or Excel) and locate their corresponding canonical targets in the [Master Dataset Field Dictionary](master-dataset-field-dictionary.md).
 
 *Example: Raw CSV Columns*
 - `Car_Name` -> Maps to `vehicle.model`
@@ -108,3 +108,9 @@ class CarDekhoTransformer(DefaultTransformer):
         return normalized
 ```
 Pass your custom transformer when subclassing or run it explicitly before validation.
+
+---
+
+## Related Documentation
+- [ETL Architecture Specification](../architecture/etl-architecture.md)
+- [Master Dataset Field Dictionary](master-dataset-field-dictionary.md)

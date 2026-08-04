@@ -15,6 +15,8 @@ The framework is decoupled and designed around **SOLID principles**:
 - **Two-Stage Validation Pipeline:** Decoupled type validation (Pydantic) and semantic business check validation (ranges, duplicates, etc.).
 - **Transactional DB Loaders:** Handled sequentially by entity dependency logic (Brand -> Vehicle -> Specifications).
 
+For a guide on integrating new sources, see the [Source Onboarding Guide](../etl/source-onboarding.md). For mapping fields, refer to the [Master Dataset Field Dictionary](../etl/master-dataset-field-dictionary.md).
+
 ---
 
 ## 2. Execution Flow Diagram
@@ -81,3 +83,11 @@ To onboard a new data source:
    pipeline = ETLPipeline(source_name="your_new_source", extractor=CSVExtractor())
    report = pipeline.run("data/raw/your_new_source.csv")
    ```
+
+---
+
+## Related Documentation
+- [Source Onboarding Guide](../etl/source-onboarding.md)
+- [Master Dataset Field Dictionary](../etl/master-dataset-field-dictionary.md)
+- [Master Vehicle Database Schema](master-vehicle-schema.md)
+- [ADR 001: ETL Architecture Design](../adr/ADR-001-etl-architecture.md)

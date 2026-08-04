@@ -2,13 +2,19 @@
 
 **Project:** Smart Vehicle Purchase Consultant (SVPC)  
 **Version:** 1.1  
-**Purpose:** This document defines the canonical data model for the SVPC Master Dataset. All external datasets (Kaggle, manufacturer brochures, APIs, etc.) must be transformed into this schema before being imported into PostgreSQL.
+**Purpose:** This document defines the canonical fields used during ETL ingestion. All external datasets (Kaggle, manufacturer brochures, APIs, etc.) must map their incoming columns into these categories and structures before database persistence.
+
+---
+
+## Relationship to Database Schema
+
+While this dictionary acts as the reference for ETL source mappings, the physical database structure, foreign key relations, and model constraints are defined in the [Master Vehicle Schema](../architecture/master-vehicle-schema.md). Developers should consult the database schema document for details on table relationships, UUID keys, and persistent indexes.
 
 ---
 
 # Design Principles
 
-- The Master Dataset is the **single source of truth**.
+- The Master Dataset is the **single source of truth** for ingestion mapping.
 - Raw datasets must never be modified directly.
 - Every external source must be mapped into this schema.
 - Missing values should be stored as `NULL`.
@@ -28,7 +34,11 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 1 — Vehicle Identity
+# Ingestion Categories Reference
+
+The fields below represent the target parameters for the ETL mapper. For physical database column typings and indices, see the [Master Vehicle Schema](../architecture/master-vehicle-schema.md).
+
+### Category 1 — Vehicle Identity
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -40,11 +50,11 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 | segment | Enum | ✅ | A, B, C, D, Premium, Luxury | vehicles |
 | fuel_type | Enum | ✅ | Petrol, Diesel, CNG, Electric, Hybrid, Plugin Hybrid | vehicles |
 
-> **Note on `fuel_type` placement:** Although fuel type is technically an engine characteristic, it is one of the primary filtering attributes used in recommendation queries. Retaining it on the `vehicles` table avoids an extra JOIN on every common filter and improves query performance. This is an intentional, documented denormalization.
+> **Note on `fuel_type` placement:** Although fuel type is technically an engine characteristic, it is one of the primary filtering attributes used in recommendation queries. Retaining it on the `vehicles` table avoids an extra JOIN on every common filter and improves query performance. This is an intentional, documented denormalization. See [Master Vehicle Schema - 2. Vehicle](../architecture/master-vehicle-schema.md#2-vehicle).
 
 ---
 
-# Category 2 — Pricing
+### Category 2 — Pricing
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -53,7 +63,7 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 3 — Engine & Performance
+### Category 3 — Engine & Performance
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -72,7 +82,7 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 4 — Dimensions
+### Category 4 — Dimensions
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -89,7 +99,7 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 5 — Safety
+### Category 5 — Safety
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -110,7 +120,7 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 6 — Features & Comfort
+### Category 6 — Features & Comfort
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -135,7 +145,7 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 7 — Ownership & Maintenance
+### Category 7 — Ownership & Maintenance
 
 | Field | Data Type | Required | Description | Database Table |
 |--------|-----------|----------|-------------|----------------|
@@ -148,10 +158,10 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 8 — Availability
+### Category 8 — Availability
 
-| Field | Data Type | Required | Description | Database Table (Future) |
-|--------|-----------|----------|-------------|-------------------------|
+| Field | Data Type | Required | Description | Database Table |
+|--------|-----------|----------|-------------|----------------|
 | launch_year | Integer | Optional | Official launch year | availability_specs |
 | current_status | Enum | Optional | Active / Discontinued | availability_specs |
 | booking_open | Boolean | Optional | Booking availability | availability_specs |
@@ -159,10 +169,10 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 
 ---
 
-# Category 9 — Environmental
+### Category 9 — Environmental
 
-| Field | Data Type | Required | Description | Database Table (Future) |
-|--------|-----------|----------|-------------|-------------------------|
+| Field | Data Type | Required | Description | Database Table |
+|--------|-----------|----------|-------------|----------------|
 | emission_standard | Enum | Optional | BS6, BS6 Phase 2, etc. | environmental_specs |
 | co2_emissions_gkm | Float | Optional | CO₂ emissions (g/km) | environmental_specs |
 | battery_capacity_kwh | Float | Optional | Battery capacity (kWh) | environmental_specs |
@@ -179,60 +189,27 @@ Storing derived values introduces redundancy and risks data inconsistency (e.g.,
 - Store missing values as `NULL`.
 - Never use `"N/A"`, `"-"`, `"Unknown"` or empty strings.
 
-## Units
+## Ingestion Units
 
-| Measurement | Standard Unit |
-|------------|---------------|
-| Price | ₹ |
-| Engine | cc |
-| Power | bhp |
-| Torque | Nm |
-| Mileage | km/l |
-| Length | mm |
-| Weight | kg |
-| Fuel Tank | litres |
-| Battery | kWh |
+| Measurement | Standard Unit | Ingestion Format |
+|------------|---------------|------------------|
+| Price | ₹ | Decimal |
+| Engine | cc | Integer |
+| Power | bhp | Float |
+| Torque | Nm | Float |
+| Mileage | km/l | Float |
+| Length | mm | Integer |
+| Weight | kg | Integer |
+| Fuel Tank | litres | Float |
+| Battery | kWh | Float |
 
-## Canonical Formatting
-
-Brand names should be standardized:
-
-- `TATA`
-- `tata`
-- ` Tata `
-
-↓
-
-`Tata`
-
-Fuel types:
-
-- Petrol
-- Diesel
-- CNG
-- Electric
-- Hybrid
-- Plugin Hybrid
-
-Transmission:
-
-- Manual
-- Automatic
-- AMT
-- CVT
-- DCT
-
-Drivetrain:
-
-- FWD
-- RWD
-- AWD
-- 4WD
-
-Boolean values:
-
-- TRUE
-- FALSE
+## Canonical Ingestion Formatting
+Refer to the [Canonical Enumerations in Master Vehicle Schema](../architecture/master-vehicle-schema.md#canonical-enumerations) for accepted values for enums:
+- **Fuel Type**
+- **Transmission**
+- **Drive Type**
+- **Body Type**
+- **Vehicle Segment**
 
 ---
 
@@ -241,4 +218,4 @@ Boolean values:
 | Version | Description |
 |----------|-------------|
 | v1.0 | Initial Master Dataset Field Dictionary |
-| v1.1 | Removed `price_category` and `vehicle_type` (derived fields). Moved `fuel_type` to Category 1 (Vehicle Identity) with note on intentional denormalization. Retained `fuel_tank_capacity_l` in Category 3 (Engine & Performance). Added Derived Fields section to Design Principles. Added `Drivetrain` to Canonical Formatting. Updated `Plugin Hybrid` in fuel type list. |
+| v1.1 | Removed `price_category` and `vehicle_type` (derived fields). Moved `fuel_type` to Category 1 (Vehicle Identity) with note on intentional denormalization. Retained `fuel_tank_capacity_l` in Category 3 (Engine & Performance). Added Derived Fields section to Design Principles. Added `Drivetrain` to Canonical Formatting. Updated `Plugin Hybrid` in fuel type list. Reorganized dictionary location into `docs/etl/`. |
