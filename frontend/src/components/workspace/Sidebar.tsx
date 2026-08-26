@@ -71,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             size="icon-xs"
             variant="ghost"
             onClick={onToggleTheme}
-            title="Toggle theme"
+            title="Toggle theme (Hotkey: D)"
           >
             {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
           </Button>
@@ -203,9 +203,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <button
           onClick={onToggleTheme}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+          title="Toggle theme (Hotkey: D)"
         >
           {isDark ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-blue-500" />}
-          <span className="text-[11px] font-medium">{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+          <span className="text-[11px] font-medium">{isDark ? 'Light' : 'Dark'}</span>
+          <kbd className="px-1.5 py-0.2 rounded bg-muted text-[10px] font-mono border border-border/80 text-muted-foreground">
+            D
+          </kbd>
         </button>
 
         <span className="text-[10px] font-mono text-muted-foreground">SVPC Monorepo</span>

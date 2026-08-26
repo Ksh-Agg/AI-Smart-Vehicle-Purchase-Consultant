@@ -4,7 +4,7 @@ import { ThinkingBlock } from './ThinkingBlock';
 import { ToolInvocationChip } from './ToolInvocationChip';
 import { ApprovalCard } from './ApprovalCard';
 import { PromptBar } from './PromptBar';
-import { Bot, User, Car, Sparkles } from 'lucide-react';
+import { Bot, User, Car, Sparkles, PanelRight } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 interface ChatAreaProps {
@@ -12,7 +12,8 @@ interface ChatAreaProps {
   isStreaming: boolean;
   onSubmitPrompt: (prompt: string) => void;
   onApprovalAction: (approvalId: string, action: 'approved' | 'modified' | 'rejected') => void;
-  onViewRecommendationsTab: () => void;
+  onToggleCanvas: () => void;
+  isCanvasCollapsed: boolean;
 }
 
 export const ChatArea: React.FC<ChatAreaProps> = ({
@@ -20,7 +21,8 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   isStreaming,
   onSubmitPrompt,
   onApprovalAction,
-  onViewRecommendationsTab,
+  onToggleCanvas,
+  isCanvasCollapsed,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -54,11 +56,12 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
         </div>
 
         <button
-          onClick={onViewRecommendationsTab}
-          className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-border/80 bg-muted/40 hover:bg-muted transition-colors"
+          onClick={onToggleCanvas}
+          className="text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-border/80 bg-muted/40 hover:bg-muted transition-colors cursor-pointer"
+          title={isCanvasCollapsed ? 'Open Inspector Canvas' : 'Collapse Inspector Canvas'}
         >
-          <Sparkles className="w-3.5 h-3.5 text-primary" />
-          <span>Inspect Canvas</span>
+          {isCanvasCollapsed ? <PanelRight className="w-3.5 h-3.5 text-primary" /> : <Sparkles className="w-3.5 h-3.5 text-primary" />}
+          <span>{isCanvasCollapsed ? 'Open Canvas' : 'Inspect Canvas'}</span>
         </button>
       </div>
 
