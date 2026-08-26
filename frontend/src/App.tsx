@@ -17,6 +17,7 @@ export default function App() {
   });
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isCanvasCollapsed, setIsCanvasCollapsed] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -28,6 +29,24 @@ export default function App() {
       localStorage.setItem('svpc-theme', 'light');
     }
   }, [isDark]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = (document.activeElement?.tagName || '').toLowerCase();
+      const isEditable =
+        activeTag === 'input' ||
+        activeTag === 'textarea' ||
+        (document.activeElement as HTMLElement)?.isContentEditable;
+
+      if (!isEditable && (e.key === 'd' || e.key === 'D') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setIsDark((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const {
     sessions,
@@ -57,6 +76,7 @@ export default function App() {
       )} powertrains prioritizing Safety (${profile.priorities.safety}), Cargo (${profile.priorities.cargoSpace}), and Efficiency (${profile.priorities.fuelEconomy}).`
     );
     setActiveTab('recommendations');
+    if (isCanvasCollapsed) setIsCanvasCollapsed(false);
   };
 
   return (
@@ -68,7 +88,10 @@ export default function App() {
         onSelectSession={setActiveSessionId}
         onNewSession={resetSession}
         profile={profile}
-        onOpenProfileTuner={() => setActiveTab('profile')}
+        onOpenProfileTuner={() => {
+          setActiveTab('profile');
+          if (isCanvasCollapsed) setIsCanvasCollapsed(false);
+        }}
         isDark={isDark}
         onToggleTheme={() => setIsDark(!isDark)}
         isCollapsed={isSidebarCollapsed}
@@ -82,12 +105,19 @@ export default function App() {
           isStreaming={isStreaming}
           onSubmitPrompt={submitPrompt}
           onApprovalAction={handleApprovalAction}
-          onViewRecommendationsTab={() => setActiveTab('recommendations')}
+          onToggleCanvas={() => setIsCanvasCollapsed(!isCanvasCollapsed)}
+          isCanvasCollapsed={isCanvasCollapsed}
         />
       </div>
 
       {/* Right Canvas: Recommendations / Compare Matrix / LangGraph Workflow / Intake Tuner */}
-      <div className="w-[420px] lg:w-[480px] xl:w-[520px] h-full hidden md:flex flex-col shrink-0">
+      <div
+        className={`h-full hidden md:flex flex-col shrink-0 transition-all duration-200 ${
+          isCanvasCollapsed
+            ? 'w-14'
+            : 'w-[420px] lg:w-[480px] xl:w-[520px]'
+        }`}
+      >
         <InspectorCanvas
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -100,6 +130,8 @@ export default function App() {
           profile={profile}
           onUpdateProfile={setProfile}
           onRunConsultationWithProfile={handleRunConsultationWithProfile}
+          isCollapsed={isCanvasCollapsed}
+          onToggleCollapse={() => setIsCanvasCollapsed(!isCanvasCollapsed)}
         />
       </div>
     </div>
