@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
 
     model_config = SettingsConfigDict(
-        env_file=(REPOSITORY_DIR / ".env", BASE_DIR / ".env"),
+        env_file=REPOSITORY_DIR / ".env",
         env_file_encoding="utf-8",
         extra="ignore",
     )
