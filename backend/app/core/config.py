@@ -5,6 +5,7 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+REPOSITORY_DIR = BASE_DIR.parent
 
 
 class Environment(str, Enum):
@@ -41,7 +42,7 @@ class Settings(BaseSettings):
     DATABASE_HOST: str = "localhost"
     DATABASE_PORT: int = 5432
     DATABASE_NAME: str = "svpc"
-    DATABASE_USER: str = "postgres"
+    DATABASE_USER: str = "svpc"
     DATABASE_PASSWORD: str
 
     @property
@@ -59,7 +60,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
 
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR / ".env",
+        env_file=(REPOSITORY_DIR / ".env", BASE_DIR / ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )

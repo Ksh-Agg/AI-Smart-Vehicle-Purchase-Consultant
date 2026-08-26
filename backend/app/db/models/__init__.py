@@ -1,41 +1,31 @@
-"""Database models package."""
+"""Catalogue database models."""
 
-from app.db.models.availability_spec import AvailabilitySpec
-from app.db.models.brand import Brand
-from app.db.models.dimension_spec import DimensionSpec
-from app.db.models.engine_spec import EngineSpec
-from app.db.models.enums import (
-    BodyType,
-    DrivetrainType,
-    EmissionStandard,
-    FuelType,
-    SegmentType,
-    TransmissionType,
-    VehicleStatus,
+from app.db.models.catalogue import Brand, Variant, VehicleModel
+from app.db.models.comfort import VariantComfortSpec
+from app.db.models.connected import VariantConnectedSpec
+from app.db.models.infotainment import VariantInfotainmentSpec
+from app.db.models.lighting import VariantLightingSpec
+from app.db.models.physical import VariantPhysicalSpec
+from app.db.models.powertrain import (
+    VariantChargingOption,
+    VariantPowertrainSpec,
+    VariantTerrainMode,
 )
-from app.db.models.environmental_spec import EnvironmentalSpec
-from app.db.models.feature_spec import FeatureSpec
-from app.db.models.ownership_spec import OwnershipSpec
-from app.db.models.safety_spec import SafetySpec
-from app.db.models.vehicle import Vehicle
+from app.db.models.pricing import VariantPrice
+from app.db.models.safety import VariantSafetySpec
 
 __all__ = [
-    # Models
     "Brand",
-    "Vehicle",
-    "EngineSpec",
-    "DimensionSpec",
-    "SafetySpec",
-    "FeatureSpec",
-    "OwnershipSpec",
-    "AvailabilitySpec",
-    "EnvironmentalSpec",
-    # Enums
-    "BodyType",
-    "DrivetrainType",
-    "EmissionStandard",
-    "FuelType",
-    "SegmentType",
-    "TransmissionType",
-    "VehicleStatus",
+    "VehicleModel",
+    "Variant",
+    "VariantPrice",
+    "VariantPowertrainSpec",
+    "VariantChargingOption",
+    "VariantTerrainMode",
+    "VariantPhysicalSpec",
+    "VariantSafetySpec",
+    "VariantComfortSpec",
+    "VariantInfotainmentSpec",
+    "VariantLightingSpec",
+    "VariantConnectedSpec",
 ]

@@ -1,21 +1,16 @@
 [project]
 name = "backend"
 version = "0.1.0"
-description = "Add your description here"
+description = "FastAPI backend for the SVPC vehicle catalogue"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.18.5",
     "fastapi>=0.139.2",
-    "google-genai>=2.12.1",
-    "numpy>=2.5.1",
-    "pandas>=3.0.3",
     "psycopg[binary]>=3.3.4",
     "pydantic>=2.13.4",
     "pydantic-settings>=2.14.2",
     "python-dotenv>=1.2.2",
-    "scikit-fuzzy>=0.5.0",
-    "scikit-learn>=1.9.0",
     "sqlalchemy>=2.0.51",
     "uvicorn>=0.51.0",
 ]

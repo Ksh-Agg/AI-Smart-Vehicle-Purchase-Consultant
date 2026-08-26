@@ -1,3 +1,6 @@
 # heavy dependency 
 .agents/
 .agents/AGENTS.md
+.env
+.DS_Store
+node_modules/
