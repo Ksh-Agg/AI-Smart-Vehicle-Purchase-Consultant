@@ -3,6 +3,7 @@
 from app.db.models.catalogue import Brand, Variant, VehicleModel
 from app.db.models.comfort import VariantComfortSpec
 from app.db.models.connected import VariantConnectedSpec
+from app.db.models.consultation import Consultation, ConsultationShortlistItem
 from app.db.models.infotainment import VariantInfotainmentSpec
 from app.db.models.lighting import VariantLightingSpec
 from app.db.models.physical import VariantPhysicalSpec
@@ -28,4 +29,6 @@ __all__ = [
     "VariantInfotainmentSpec",
     "VariantLightingSpec",
     "VariantConnectedSpec",
+    "Consultation",
+    "ConsultationShortlistItem",
 ]
