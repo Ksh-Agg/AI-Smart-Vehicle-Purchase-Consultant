@@ -204,7 +204,7 @@ export const InspectorCanvas: React.FC<InspectorCanvasProps> = ({
                   Scored Vehicle Recommendations
                 </h3>
                 <p className="text-xs text-muted-foreground">
-                  Ranked by Multi-Attribute Fuzzy Engine using current profile constraints.
+                  Deterministic fit and ownership-cost ranking using current constraints.
                 </p>
               </div>
               <Badge variant="outline" className="text-[10px] font-mono">

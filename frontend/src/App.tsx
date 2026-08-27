@@ -71,9 +71,9 @@ export default function App() {
 
   const handleRunConsultationWithProfile = () => {
     submitPrompt(
-      `Re-score catalogue vehicles for budget ceiling $${profile.budgetMax.toLocaleString()} with ${profile.preferredPowertrains.join(
-        ' & '
-      )} powertrains prioritizing Safety (${profile.priorities.safety}), Cargo (${profile.priorities.cargoSpace}), and Efficiency (${profile.priorities.fuelEconomy}).`
+      `Recommend Maruti Suzuki cars in ${profile.city} within a hard on-road budget of ₹${profile.maxBudget.toLocaleString('en-IN')}. ` +
+      `Preferred fuels: ${profile.preferredFuels.join(', ') || 'any'}; transmissions: ${profile.preferredTransmissions.join(', ') || 'any'}. ` +
+      `Annual driving is ${profile.annualDistanceKm.toLocaleString('en-IN')} km for ${profile.ownershipYears} years.`
     );
     setActiveTab('recommendations');
     if (isCanvasCollapsed) setIsCanvasCollapsed(false);

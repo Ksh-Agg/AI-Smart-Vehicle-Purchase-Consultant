@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowUp, Sparkles, SlidersHorizontal, Car, Zap, Shield, DollarSign } from 'lucide-react';
+import { ArrowUp, Sparkles, SlidersHorizontal, Car, Shield, IndianRupee } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface PromptBarProps {
@@ -9,24 +9,24 @@ interface PromptBarProps {
 
 const QUICK_SUGGESTIONS = [
   {
-    icon: <Zap className="w-3 h-3 text-amber-500" />,
-    label: 'Best EV / Hybrid SUV under $50k',
-    prompt: 'Compare the best EV and Hybrid SUVs under $50,000 prioritizing family safety and high cargo volume.',
+    icon: <Car className="w-3 h-3 text-amber-500" />,
+    label: 'Family car in Pune',
+    prompt: 'Recommend a safe Maruti family car in Pune under ₹12 lakh on-road with good boot space.',
   },
   {
     icon: <Car className="w-3 h-3 text-blue-500" />,
-    label: 'Tesla Model Y vs Hyundai Ioniq 5',
-    prompt: 'Do a deep dive comparison of Tesla Model Y Long Range vs Hyundai Ioniq 5 Limited in charging speed, real world range, and cargo capacity.',
+    label: 'Baleno vs Swift',
+    prompt: 'Compare the current Maruti Baleno and Swift variants for city use, safety, efficiency, and five-year ownership cost in Delhi.',
   },
   {
-    icon: <DollarSign className="w-3 h-3 text-emerald-500" />,
+    icon: <IndianRupee className="w-3 h-3 text-emerald-500" />,
     label: '5-Year Cost of Ownership',
-    prompt: 'Calculate the 5-year total cost of ownership including depreciation, electricity vs gasoline, and insurance for my shortlisted vehicles.',
+    prompt: 'Calculate the five-year ownership cost for my shortlist, showing fuel, maintenance, insurance, finance, and resale evidence gaps.',
   },
   {
     icon: <Shield className="w-3 h-3 text-purple-500" />,
-    label: 'Highest IIHS Safety Picks',
-    prompt: 'Filter vehicles strictly by IIHS Top Safety Pick+ and NHTSA 5-star overall crash ratings with active lane keep assist.',
+    label: 'Safety-first shortlist',
+    prompt: 'Recommend Maruti variants under ₹15 lakh on-road in Bengaluru, prioritizing verified Bharat NCAP applicability and safety equipment.',
   },
 ];
 
@@ -86,7 +86,7 @@ export const PromptBar: React.FC<PromptBarProps> = ({ onSubmit, isStreaming }) =
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask anything about vehicle specs, pricing, tax credits, safety ratings, or multi-attribute trade-offs..."
+          placeholder="Tell me your city, on-road budget, usage, and priorities..."
           rows={1}
           disabled={isStreaming}
           className="w-full resize-none bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-hidden max-h-32 leading-relaxed px-1 py-0.5"

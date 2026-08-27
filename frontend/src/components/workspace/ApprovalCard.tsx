@@ -87,7 +87,7 @@ export const ApprovalCard: React.FC<ApprovalCardProps> = ({ approval, onAction }
             className="gap-1.5 text-xs"
           >
             <Edit3 className="w-3.5 h-3.5" />
-            Keep Unsubsidized
+            Modify Criteria
           </Button>
 
           <Button

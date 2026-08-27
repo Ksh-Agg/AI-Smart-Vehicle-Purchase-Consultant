@@ -26,7 +26,7 @@ export const ThinkingBlock: React.FC<ThinkingBlockProps> = ({ thinking }) => {
             <Sparkles className="w-3.5 h-3.5 text-muted-foreground" />
           )}
           <span className="font-medium tracking-tight">
-            {thinking.isThinking ? 'Agent Deliberating & Reasoning...' : 'Reasoning Process'}
+            {thinking.isThinking ? 'Workflow running...' : 'Workflow progress'}
           </span>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border/60">
             {thinking.thoughts.length} step{thinking.thoughts.length !== 1 ? 's' : ''}
@@ -50,7 +50,7 @@ export const ThinkingBlock: React.FC<ThinkingBlockProps> = ({ thinking }) => {
           {thinking.isThinking && (
             <div className="flex items-center gap-2 text-primary text-[11px] pt-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-              <span>Evaluating multi-attribute trade-offs & fuzzy constraints...</span>
+              <span>Running grounded tools and deterministic scoring...</span>
             </div>
           )}
         </div>

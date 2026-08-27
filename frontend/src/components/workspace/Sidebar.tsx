@@ -3,8 +3,8 @@ import type { ConsultationSession, UserPreferenceProfile } from '../../types/age
 import {
   Plus,
   Car,
-  DollarSign,
-  Fuel,
+  IndianRupee,
+  MapPin,
   Shield,
   Sun,
   Moon,
@@ -99,7 +99,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <div>
               <h1 className="font-bold text-foreground tracking-tight text-xs">SVPC Workspace</h1>
-              <p className="text-[10px] text-muted-foreground font-mono">Agent v2.4 • LangGraph</p>
+              <p className="text-[10px] text-muted-foreground font-mono">Maruti • LangGraph</p>
             </div>
           </div>
 
@@ -173,19 +173,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-2 rounded-lg bg-card border border-border/70 space-y-1.5 text-[11px]">
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="flex items-center gap-1">
-              <DollarSign className="w-3 h-3 text-emerald-500" /> Ceiling:
+              <IndianRupee className="w-3 h-3 text-emerald-500" /> Ceiling:
             </span>
             <span className="font-mono font-semibold text-foreground">
-              ${profile.budgetMax.toLocaleString()}
+              {profile.maxBudget ? `₹${profile.maxBudget.toLocaleString('en-IN')}` : 'Not set'}
             </span>
           </div>
 
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="flex items-center gap-1">
-              <Fuel className="w-3 h-3 text-blue-500" /> Powertrain:
+              <MapPin className="w-3 h-3 text-blue-500" /> City:
             </span>
             <span className="font-semibold text-foreground truncate max-w-[100px]">
-              {profile.preferredPowertrains.join(', ')}
+              {profile.city || 'Not set'}
             </span>
           </div>
 
@@ -193,7 +193,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span className="flex items-center gap-1">
               <Shield className="w-3 h-3 text-purple-500" /> Priority:
             </span>
-            <span className="font-semibold text-foreground">Safety (High)</span>
+            <span className="font-semibold text-foreground">Safety ({profile.priorities.safety})</span>
           </div>
         </div>
       </div>

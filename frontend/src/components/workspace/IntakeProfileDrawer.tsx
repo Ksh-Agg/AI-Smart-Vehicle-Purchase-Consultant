@@ -1,6 +1,6 @@
 import React from 'react';
-import type { UserPreferenceProfile, PowertrainType } from '../../types/agent';
-import { Sliders, Shield, Fuel, Gauge, Box, Cpu, DollarSign, Save } from 'lucide-react';
+import { IndianRupee, MapPin, Sliders } from 'lucide-react';
+import type { FuelType, Priority, TransmissionType, UserPreferenceProfile } from '../../types/agent';
 import { Button } from '../ui/button';
 
 interface IntakeProfileDrawerProps {
@@ -9,239 +9,33 @@ interface IntakeProfileDrawerProps {
   onRunConsultationWithProfile?: () => void;
 }
 
-const POWERTRAIN_OPTIONS: PowertrainType[] = ['EV', 'Hybrid', 'Plug-in Hybrid', 'Gasoline'];
+const FUELS: FuelType[] = ['petrol', 'cng', 'hybrid', 'electric'];
+const TRANSMISSIONS: TransmissionType[] = ['manual', 'automatic', 'amt', 'torque_converter', 'e_cvt'];
+const PRIORITIES: Array<[keyof UserPreferenceProfile['priorities'], string]> = [
+  ['safety', 'Safety'], ['efficiency', 'Efficiency'], ['space', 'Space'], ['performance', 'Performance'], ['features', 'Features'],
+];
 
-export const IntakeProfileDrawer: React.FC<IntakeProfileDrawerProps> = ({
-  profile,
-  onUpdateProfile,
-  onRunConsultationWithProfile,
-}) => {
-  const togglePowertrain = (pt: PowertrainType) => {
-    const next = profile.preferredPowertrains.includes(pt)
-      ? profile.preferredPowertrains.filter((p) => p !== pt)
-      : [...profile.preferredPowertrains, pt];
-    onUpdateProfile({ ...profile, preferredPowertrains: next });
-  };
-
-  const setPriority = (
-    key: keyof UserPreferenceProfile['priorities'],
-    level: 'Low' | 'Medium' | 'High'
-  ) => {
-    onUpdateProfile({
-      ...profile,
-      priorities: {
-        ...profile.priorities,
-        [key]: level,
-      },
-    });
-  };
-
+export const IntakeProfileDrawer: React.FC<IntakeProfileDrawerProps> = ({ profile, onUpdateProfile, onRunConsultationWithProfile }) => {
+  const toggle = <T,>(items: T[], value: T) => items.includes(value) ? items.filter((item) => item !== value) : [...items, value];
+  const setPriority = (key: keyof UserPreferenceProfile['priorities'], value: Priority) => onUpdateProfile({ ...profile, priorities: { ...profile.priorities, [key]: value } });
   return (
-    <div className="space-y-5 text-xs">
-      <div>
-        <h3 className="text-sm font-bold text-foreground tracking-tight flex items-center gap-2">
-          <Sliders className="w-4 h-4 text-primary" />
-          Intake & Preference Weight Tuner
-        </h3>
-        <p className="text-xs text-muted-foreground">
-          Calibrate dynamic bounds used by the Fuzzy Scoring Engine and Multi-Attribute Ranker.
-        </p>
-      </div>
-
-      {/* Budget Constraints */}
-      <div className="p-3.5 rounded-xl border border-border bg-card space-y-3">
-        <div className="flex items-center justify-between">
-          <label className="font-semibold text-foreground flex items-center gap-1.5">
-            <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
-            Budget Range Ceiling
-          </label>
-          <span className="font-mono font-bold text-foreground">
-            ${profile.budgetMin.toLocaleString()} - ${profile.budgetMax.toLocaleString()}
-          </span>
-        </div>
-
-        <input
-          type="range"
-          min="25000"
-          max="90000"
-          step="2500"
-          value={profile.budgetMax}
-          onChange={(e) =>
-            onUpdateProfile({ ...profile, budgetMax: Number(e.target.value) })
-          }
-          className="w-full accent-primary cursor-pointer"
-        />
-        <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
-          <span>$25k (Entry)</span>
-          <span>$50k (Mainstream)</span>
-          <span>$90k (Premium)</span>
-        </div>
-      </div>
-
-      {/* Powertrain Preferences */}
-      <div className="p-3.5 rounded-xl border border-border bg-card space-y-2.5">
-        <label className="font-semibold text-foreground block">
-          Acceptable Powertrains
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {POWERTRAIN_OPTIONS.map((pt) => {
-            const isChecked = profile.preferredPowertrains.includes(pt);
-            return (
-              <button
-                key={pt}
-                type="button"
-                onClick={() => togglePowertrain(pt)}
-                className={`flex items-center justify-between p-2 rounded-lg border text-xs font-medium transition-colors ${
-                  isChecked
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border bg-muted/30 text-muted-foreground hover:bg-muted/60'
-                }`}
-              >
-                <span>{pt}</span>
-                <span className={`w-2 h-2 rounded-full ${isChecked ? 'bg-primary' : 'bg-border'}`} />
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Dynamic Fuzzy Priority Weights */}
-      <div className="p-3.5 rounded-xl border border-border bg-card space-y-3">
-        <label className="font-semibold text-foreground block">
-          Fuzzy Scoring Weight Allocation
-        </label>
-
-        {/* Safety */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5 text-foreground/90">
-            <Shield className="w-3.5 h-3.5 text-purple-500" />
-            <span>Safety & Crash Protection</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {(['Low', 'Medium', 'High'] as const).map((lvl) => (
-              <button
-                key={lvl}
-                type="button"
-                onClick={() => setPriority('safety', lvl)}
-                className={`px-2 py-0.5 rounded text-[10px] font-medium border transition-colors ${
-                  profile.priorities.safety === lvl
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                }`}
-              >
-                {lvl}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Fuel Economy / Efficiency */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5 text-foreground/90">
-            <Fuel className="w-3.5 h-3.5 text-blue-500" />
-            <span>Fuel Economy & Range</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {(['Low', 'Medium', 'High'] as const).map((lvl) => (
-              <button
-                key={lvl}
-                type="button"
-                onClick={() => setPriority('fuelEconomy', lvl)}
-                className={`px-2 py-0.5 rounded text-[10px] font-medium border transition-colors ${
-                  profile.priorities.fuelEconomy === lvl
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                }`}
-              >
-                {lvl}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Cargo & Passenger Utility */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5 text-foreground/90">
-            <Box className="w-3.5 h-3.5 text-amber-500" />
-            <span>Cargo & Family Space</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {(['Low', 'Medium', 'High'] as const).map((lvl) => (
-              <button
-                key={lvl}
-                type="button"
-                onClick={() => setPriority('cargoSpace', lvl)}
-                className={`px-2 py-0.5 rounded text-[10px] font-medium border transition-colors ${
-                  profile.priorities.cargoSpace === lvl
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                }`}
-              >
-                {lvl}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Performance & Acceleration */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5 text-foreground/90">
-            <Gauge className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Performance & 0-60</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {(['Low', 'Medium', 'High'] as const).map((lvl) => (
-              <button
-                key={lvl}
-                type="button"
-                onClick={() => setPriority('performance', lvl)}
-                className={`px-2 py-0.5 rounded text-[10px] font-medium border transition-colors ${
-                  profile.priorities.performance === lvl
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                }`}
-              >
-                {lvl}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Tech & Infotainment */}
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1.5 text-foreground/90">
-            <Cpu className="w-3.5 h-3.5 text-indigo-500" />
-            <span>Tech & Driver Assist</span>
-          </div>
-          <div className="flex items-center gap-1">
-            {(['Low', 'Medium', 'High'] as const).map((lvl) => (
-              <button
-                key={lvl}
-                type="button"
-                onClick={() => setPriority('techFeatures', lvl)}
-                className={`px-2 py-0.5 rounded text-[10px] font-medium border transition-colors ${
-                  profile.priorities.techFeatures === lvl
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'
-                }`}
-              >
-                {lvl}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {onRunConsultationWithProfile && (
-        <Button
-          size="sm"
-          onClick={onRunConsultationWithProfile}
-          className="w-full gap-2 text-xs bg-primary text-primary-foreground hover:bg-primary/90"
-        >
-          <Save className="w-3.5 h-3.5" />
-          Re-Score Catalogue with Updated Weights
-        </Button>
-      )}
+    <div className="space-y-4 text-xs">
+      <div><h3 className="flex items-center gap-2 text-sm font-bold"><Sliders className="w-4 h-4 text-primary" /> Purchase profile</h3><p className="text-muted-foreground">City and maximum on-road budget are the only required fields.</p></div>
+      <section className="p-3 rounded-xl border border-border bg-card space-y-3">
+        <label className="font-semibold flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> City</label>
+        <input value={profile.city} onChange={(event) => onUpdateProfile({ ...profile, city: event.target.value })} placeholder="e.g. Pune" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:ring-2 focus:ring-primary/30" />
+        <div className="flex justify-between"><label className="font-semibold flex items-center gap-1"><IndianRupee className="w-3.5 h-3.5" /> Maximum budget</label><span className="font-mono font-bold">{profile.maxBudget ? `₹${profile.maxBudget.toLocaleString('en-IN')}` : 'Not set'}</span></div>
+        <input type="range" min="300000" max="3000000" step="50000" value={profile.maxBudget} onChange={(event) => onUpdateProfile({ ...profile, maxBudget: Number(event.target.value) })} className="w-full accent-primary" />
+      </section>
+      <section className="p-3 rounded-xl border border-border bg-card space-y-2"><label className="font-semibold">Preferred fuels</label><div className="flex flex-wrap gap-2">{FUELS.map((fuel) => <button key={fuel} type="button" onClick={() => onUpdateProfile({ ...profile, preferredFuels: toggle(profile.preferredFuels, fuel) })} className={`rounded-md border px-2 py-1 capitalize ${profile.preferredFuels.includes(fuel) ? 'border-primary bg-primary/10 text-primary' : 'border-border'}`}>{fuel}</button>)}</div></section>
+      <section className="p-3 rounded-xl border border-border bg-card space-y-2"><label className="font-semibold">Preferred transmissions</label><div className="flex flex-wrap gap-2">{TRANSMISSIONS.map((transmission) => <button key={transmission} type="button" onClick={() => onUpdateProfile({ ...profile, preferredTransmissions: toggle(profile.preferredTransmissions, transmission) })} className={`rounded-md border px-2 py-1 capitalize ${profile.preferredTransmissions.includes(transmission) ? 'border-primary bg-primary/10 text-primary' : 'border-border'}`}>{transmission.replaceAll('_', ' ')}</button>)}</div></section>
+      <section className="grid grid-cols-3 gap-2 p-3 rounded-xl border border-border bg-card">
+        <label>Annual km<input type="number" min="1000" step="1000" value={profile.annualDistanceKm} onChange={(event) => onUpdateProfile({ ...profile, annualDistanceKm: Number(event.target.value) })} className="mt-1 w-full rounded border border-border bg-background p-2" /></label>
+        <label>Years<input type="number" min="1" max="15" value={profile.ownershipYears} onChange={(event) => onUpdateProfile({ ...profile, ownershipYears: Number(event.target.value) })} className="mt-1 w-full rounded border border-border bg-background p-2" /></label>
+        <label>Hard seats<input type="number" min="1" max="20" value={profile.mandatorySeats || ''} onChange={(event) => onUpdateProfile({ ...profile, mandatorySeats: event.target.value ? Number(event.target.value) : undefined })} className="mt-1 w-full rounded border border-border bg-background p-2" /></label>
+      </section>
+      <section className="p-3 rounded-xl border border-border bg-card space-y-3">{PRIORITIES.map(([key, label]) => <div key={key} className="flex items-center justify-between"><span className="font-medium">{label}</span><div className="flex gap-1">{(['low', 'medium', 'high'] as Priority[]).map((value) => <button key={value} type="button" onClick={() => setPriority(key, value)} className={`rounded border px-2 py-0.5 capitalize ${profile.priorities[key] === value ? 'border-primary bg-primary text-primary-foreground' : 'border-border'}`}>{value}</button>)}</div></div>)}</section>
+      <Button className="w-full" onClick={onRunConsultationWithProfile} disabled={!profile.city.trim() || !profile.maxBudget}>Run consultation</Button>
     </div>
   );
 };

@@ -50,7 +50,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
               </Badge>
             </div>
             <p className="text-[11px] text-muted-foreground">
-              Connected to PostgreSQL master catalogue & fuzzy recommendation scoring pipeline
+              Connected to the Maruti catalogue, official-document RAG, and deterministic scoring
             </p>
           </div>
         </div>

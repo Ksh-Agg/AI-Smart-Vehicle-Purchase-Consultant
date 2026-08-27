@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:18-alpine
+    image: pgvector/pgvector:0.8.6-pg18
     environment:
       POSTGRES_DB: ${DATABASE_NAME:-svpc}
       POSTGRES_USER: ${DATABASE_USER:-svpc}

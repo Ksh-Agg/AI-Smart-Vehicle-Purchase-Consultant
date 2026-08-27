@@ -1,45 +1,64 @@
-export type PowertrainType = 'EV' | 'Hybrid' | 'Plug-in Hybrid' | 'Gasoline';
+export type FuelType = 'petrol' | 'cng' | 'hybrid' | 'electric';
+export type TransmissionType = 'manual' | 'automatic' | 'amt' | 'torque_converter' | 'e_cvt';
+export type Priority = 'low' | 'medium' | 'high';
+
+export interface OwnershipCost {
+  years: number;
+  purchase_price: number;
+  fuel_energy_cost?: number | null;
+  maintenance_cost?: number | null;
+  insurance_cost?: number | null;
+  finance_cost?: number | null;
+  resale_value?: number | null;
+  total_cost: number;
+  assumptions: string[];
+  confidence: number;
+}
 
 export interface Vehicle {
   id: string;
+  catalogueId: string;
   make: string;
   model: string;
   year: number;
   trim: string;
+  variantName: string;
+  city: string;
   price: number;
-  powertrain: PowertrainType;
-  epaMpgOrRange: string; // e.g. "330 mi range" or "40 MPG combined"
-  zeroToSixty: string; // e.g. "4.8s"
-  cargoVolumeCuFt: number; // e.g. 76 cu ft
-  safetyRatingStars: number; // 1-5
-  nhtsaOverallScore: string; // "5-Star Safety Rating"
-  matchScore: number; // 0-100%
-  imageUrl: string;
-  fuzzyMatchBreakdown: {
-    budgetScore: number;
-    efficiencyScore: number;
-    spaceScore: number;
-    performanceScore: number;
-    safetyScore: number;
-  };
+  priceBasis: 'on_road' | 'provisional_ex_showroom';
+  fuelType: FuelType;
+  transmissionType: TransmissionType;
+  efficiency: string;
+  powerBhp?: number | null;
+  bootspaceLitres?: number | null;
+  seatingCapacity?: number | null;
+  airbagCount?: number | null;
+  matchScore: number;
+  confidence: number;
+  scoreBreakdown: Record<string, number>;
   pros: string[];
   cons: string[];
   keyFeatures: string[];
-  estimated5YearOwnershipCost: number;
+  ownershipCost: OwnershipCost;
+  evidenceUrls: string[];
 }
 
 export interface UserPreferenceProfile {
-  budgetMin: number;
-  budgetMax: number;
-  preferredPowertrains: PowertrainType[];
-  seatingCapacity: number;
-  primaryUse: 'Daily Commute' | 'Family Roadtrips' | 'City Runabout' | 'Utility & Hauling';
+  city: string;
+  minBudget?: number;
+  maxBudget: number;
+  preferredFuels: FuelType[];
+  preferredTransmissions: TransmissionType[];
+  mandatorySeats?: number;
+  primaryUse: string;
+  annualDistanceKm: number;
+  ownershipYears: number;
   priorities: {
-    safety: 'Low' | 'Medium' | 'High';
-    fuelEconomy: 'Low' | 'Medium' | 'High';
-    performance: 'Low' | 'Medium' | 'High';
-    cargoSpace: 'Low' | 'Medium' | 'High';
-    techFeatures: 'Low' | 'Medium' | 'High';
+    safety: Priority;
+    efficiency: Priority;
+    space: Priority;
+    performance: Priority;
+    features: Priority;
   };
 }
 
@@ -50,8 +69,6 @@ export interface ToolCallItem {
   toolName: string;
   label: string;
   status: ToolStatus;
-  inputParams?: Record<string, unknown>;
-  outputResult?: Record<string, unknown> | string;
   executionTimeMs?: number;
 }
 
@@ -59,12 +76,8 @@ export interface ApprovalRequest {
   id: string;
   title: string;
   description: string;
-  type: 'budget_increase' | 'criteria_relaxation' | 'schedule_test_drive';
-  payload: {
-    suggestedBudgetDelta?: number;
-    relaxedConstraint?: string;
-    tradeoffSummary?: string;
-  };
+  type: 'criteria_relaxation';
+  payload: { suggestedBudget?: number; tradeoffSummary?: string };
   status: 'pending' | 'approved' | 'modified' | 'rejected';
   resolvedAt?: string;
 }
